@@ -2,7 +2,7 @@ sleep(2000);
 unLock("000000");
 zhbOpenHesuan();
 getScreen();
-sendScreen("微信文件助手");
+sendScreen("文件传输助手");
 
 
 // 唤醒设备+单指上滑+密码解锁
@@ -22,16 +22,16 @@ function unLock(passwd) {
 function zhbOpenHesuan() {
     launchApp("郑好办");
     text("郑好码").waitFor();
-    toast("进入郑好办");
+    toastLog("进入郑好办");
     click("郑好码")
     text("核酸检测结果").waitFor();
     click("核酸检测结果")
     text("个人信息").waitFor();
-    toast("进入核酸界面");   
+    toastLog("进入核酸界面");   
 }
 
 function getScreen() {
-    threads.start(function () {
+    var thread = threads.start(function () {
         var beginBtn = classNameContains("Button").textContains("立即开始").findOne(2000);
         if (beginBtn) {
             sleep(500)
@@ -41,6 +41,8 @@ function getScreen() {
     requestScreenCapture();
     sleep(2000);
     captureScreen("/sdcard/DCIM/hesuan.jpg");
+    toastLog("截图完成");
+    thread.interrupt();
 }
 
 function sendScreen(userName) {
@@ -49,5 +51,5 @@ function sendScreen(userName) {
     click(userName);
     className("android.widget.EditText").findOne(1000).setText("/sdcard/DCIM/hesuan.jpg");
     click("确定");
-    toast("发送成功");
+    toastLog("发送成功");
 }
